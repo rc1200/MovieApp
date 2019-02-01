@@ -3,12 +3,18 @@ from django.contrib import messages
 from airtable import Airtable
 import os
 
+# get key from the .evn file -- Path defined in the settings.py utilizing the python-dotenv package
+AIRTABLE_API_KEY = os.getenv('AIRTABLE_API_KEY')
+AIRTABLE_MOVIESTABLE_BASE_ID = os.getenv('AIRTABLE_MOVIESTABLE_BASE_ID')
 
-AT = Airtable(os.environ.get('AIRTABLE_MOVIESTABLE_BASE_ID'),
+
+AT = Airtable(os.environ.get('AIRTABLE_MOVIESTABLE_BASE_ID', AIRTABLE_MOVIESTABLE_BASE_ID),
               'Movies',
-              api_key=os.environ.get('AIRTABLE_API_KEY'))
+              api_key=os.environ.get('AIRTABLE_API_KEY', AIRTABLE_API_KEY))
 
 # Create your views here.
+
+
 def home_page(request):
     user_query = str(request.GET.get('query', ''))
     search_result = AT.get_all(formula="FIND('" + user_query.lower() + "', LOWER({Name}))")
@@ -42,11 +48,12 @@ def edit(request, movie_id):
             'Notes': request.POST.get('notes')
         }
         try:
-        	response = AT.update(movie_id, data)
-        	messages.success(request, 'Updated movie: {}'.format(response['fields'].get('Name')))
+            response = AT.update(movie_id, data)
+            messages.success(request, 'Updated movie: {}'.format(response['fields'].get('Name')))
         except Exception as e:
             messages.warning(request, 'Got an error when trying to update a movie: {}'.format(e))
     return redirect('/')
+
 
 def delete(request, movie_id):
     try:

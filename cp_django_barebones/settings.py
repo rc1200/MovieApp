@@ -16,6 +16,17 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+from os.path import join, dirname
+from dotenv import load_dotenv
+# Create .env file path.
+dotenv_path = join(os.path.abspath('.'), '.env')
+# NOTE: since the setting.py is in a different directory than the .env file,
+# os.path.abspath('.') will navigate you 2 levels up to the MovieApp
+# os.path.abspath('..') will navigate yo 1 levels up to movies
+# Load file from the path.
+load_dotenv(dotenv_path)
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 

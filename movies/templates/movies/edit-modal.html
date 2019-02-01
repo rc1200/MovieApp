@@ -25,7 +25,11 @@
 
                      <div class="form-group">
                     	<label for="editNotes">Notes</label>
-                         <textarea class="form-control" id="editNotes" placeholder="Add notes" name="notes"></textarea>
+                         {% if movie.fields.Notes == "" %}
+                            <textarea class="form-control" id="editNotes" placeholder="Add notes" name="notes"></textarea>
+                         {% else %}
+                            <textarea class="form-control" id="editNotes" placeholder="Add notes" name="notes">{{movie.fields.Notes}}</textarea>
+                         {% endif %}
                     </div>
 
                     <button type="submit" class="btn btn-primary">Update</button>
